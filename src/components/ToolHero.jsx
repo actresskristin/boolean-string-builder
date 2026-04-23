@@ -27,10 +27,6 @@ function ToolHero() {
               Most hiring teams rely on job postings and inbound applicants. The
               strongest candidates are not applying.
             </p>
-
-            <p className="serif mt-6 text-xl leading-8 text-black">
-              This is how a headhunter begins a search.
-            </p>
           </div>
         </motion.div>
 
