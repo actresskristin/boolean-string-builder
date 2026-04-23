@@ -93,7 +93,7 @@ function BooleanForm({ formData, onChange, onGenerate, onParseJobDescription }) 
         <div className="mb-4">
           <p className="text-sm font-medium text-black">Start with a job description</p>
           <p className="mt-1 text-sm text-gray-600">
-            Paste or upload a job description to generate your starting search.
+            Optional for parsing.
           </p>
         </div>
 
@@ -101,7 +101,7 @@ function BooleanForm({ formData, onChange, onGenerate, onParseJobDescription }) 
           value={jobDescription}
           onChange={(e) => setJobDescription(e.target.value)}
           rows={6}
-          placeholder="Paste the job description here"
+          placeholder="Paste the job description here (optional)"
           className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
         />
 
@@ -111,7 +111,7 @@ function BooleanForm({ formData, onChange, onGenerate, onParseJobDescription }) 
             onClick={handleUploadClick}
             className="text-sm text-gray-600 underline underline-offset-4 transition hover:text-black"
           >
-            Upload PDF or DOCX
+            Upload PDF or .docx
           </button>
 
           <button
@@ -119,7 +119,7 @@ function BooleanForm({ formData, onChange, onGenerate, onParseJobDescription }) 
             onClick={handleParseClick}
             className="rounded-xl bg-[#8b000f] px-4 py-2 text-sm text-white transition hover:bg-[#74000c]"
           >
-            Generate from Job Description
+            Parse from Job Description
           </button>
         </div>
 
@@ -151,6 +151,18 @@ function BooleanForm({ formData, onChange, onGenerate, onParseJobDescription }) 
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
+
+              <button
+              type="button"
+              onClick={() => handlePlatformChange('xray')}
+              className={`rounded-xl border px-4 py-3 text-sm transition ${
+                formData.platform === 'xray'
+                  ? 'border-[#8b000f] bg-[#8b000f] text-white'
+                  : 'border-black/10 bg-white text-gray-700 hover:border-[#8b000f]/30'
+              }`}
+            >
+              Google
+            </button>
             <button
               type="button"
               onClick={() => handlePlatformChange('recruiter')}
@@ -160,19 +172,7 @@ function BooleanForm({ formData, onChange, onGenerate, onParseJobDescription }) 
                   : 'border-black/10 bg-white text-gray-700 hover:border-[#8b000f]/30'
               }`}
             >
-              I have LinkedIn Recruiter
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handlePlatformChange('xray')}
-              className={`rounded-xl border px-4 py-3 text-sm transition ${
-                formData.platform === 'xray'
-                  ? 'border-[#8b000f] bg-[#8b000f] text-white'
-                  : 'border-black/10 bg-white text-gray-700 hover:border-[#8b000f]/30'
-              }`}
-            >
-              I do not have LinkedIn Recruiter
+              LinkedIn Recruiter
             </button>
           </div>
         </div>

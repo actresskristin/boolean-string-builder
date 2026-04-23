@@ -10,7 +10,7 @@ function Hero() {
       </h2>
 
       <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-gray-700">
-        Build a clean first-pass Boolean string for LinkedIn or Google.
+        Build a clean first-pass Boolean string for LinkedIn or Google. Generated using structured search logic, not prompt-based output.
       </p>
     </section>
   )
