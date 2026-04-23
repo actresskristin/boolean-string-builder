@@ -1,0 +1,200 @@
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore'
+import Header from './components/Header'
+import ToolHero from './components/ToolHero'
+import Hero from './components/Hero'
+import BooleanForm from './components/BooleanForm'
+import TierOneCard from './components/TierOneCard'
+import BlueprintValueCard from './components/BlueprintValueCard'
+import LockedTierCard from './components/LockedTierCard'
+import Footer from './components/Footer'
+import LeadGateModal from './components/LeadGateModal'
+import { buildBooleanString } from './utils/booleanBuilder'
+import { db } from './firebase'
+
+function App() {
+  const [formData, setFormData] = useState({
+    platform: 'recruiter',
+    jobTitle: '',
+    seniority: '',
+    industry: '',
+    location: '',
+    skill1: '',
+    skill2: '',
+    skill3: '',
+    education: '',
+    certification: '',
+    exclude: '',
+  })
+
+  const [generatedString, setGeneratedString] = useState('')
+  const [showLeadGate, setShowLeadGate] = useState(false)
+  const [pendingGenerate, setPendingGenerate] = useState(false)
+  const [unlockSuccess, setUnlockSuccess] = useState(false)
+
+  const [usageCount, setUsageCount] = useState(() => {
+    return parseInt(localStorage.getItem('booleanToolUses') || '0', 10)
+  })
+
+  const [isUnlocked, setIsUnlocked] = useState(() => {
+    return localStorage.getItem('booleanToolUnlocked') === 'true'
+  })
+
+  useEffect(() => {
+    localStorage.setItem('booleanToolUses', usageCount.toString())
+  }, [usageCount])
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const runGenerate = () => {
+    const string = buildBooleanString(formData)
+
+    if (!string) {
+      alert('Job Title and Location are required')
+      return false
+    }
+
+    setGeneratedString(string)
+    return true
+  }
+
+  const handleGenerate = () => {
+    if (!isUnlocked && usageCount >= 1) {
+      setPendingGenerate(true)
+      setUnlockSuccess(false)
+      setShowLeadGate(true)
+      return
+    }
+
+    const success = runGenerate()
+
+    if (success && !isUnlocked) {
+      setUsageCount((prev) => prev + 1)
+    }
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(generatedString)
+  }
+
+  const handleLeadSubmit = async (leadData) => {
+  try {
+    const normalizedEmail = leadData.email.trim().toLowerCase()
+    const existingLocalLead = localStorage.getItem('booleanLead')
+
+    if (!existingLocalLead) {
+      await addDoc(collection(db, 'leads'), {
+        name: leadData.name,
+        email: normalizedEmail,
+        company: leadData.company,
+        jobTitle: leadData.jobTitle || '',
+        platform: formData.platform || '',
+        seniority: formData.seniority || '',
+        industry: formData.industry || '',
+        location: formData.location || '',
+        consentToContact: leadData.consentToContact,
+        createdAt: serverTimestamp(),
+      })
+    }
+
+    localStorage.setItem('booleanToolUnlocked', 'true')
+    localStorage.setItem(
+      'booleanLead',
+      JSON.stringify({
+        name: leadData.name,
+        email: normalizedEmail,
+        company: leadData.company,
+        consentToContact: leadData.consentToContact,
+      })
+    )
+
+    setIsUnlocked(true)
+    setUnlockSuccess(true)
+
+    if (pendingGenerate) {
+      const success = runGenerate()
+      if (success) {
+        setPendingGenerate(false)
+      }
+    }
+  } catch (error) {
+    console.error('Error saving lead:', error)
+    throw error
+  }
+  }
+
+  const handleCloseModal = () => {
+    setShowLeadGate(false)
+    setUnlockSuccess(false)
+  }
+
+  return (
+    <div className="min-h-screen bg-[#f7f3f1] text-black">
+      <Header />
+      <ToolHero />
+
+      <main>
+        <section className="bg-[#f7f3f1] px-6 py-14 sm:py-18">
+          <div className="mx-auto max-w-5xl">
+            <Hero />
+
+            <motion.section
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.08 }}
+              className="mx-auto mt-12 max-w-3xl"
+            >
+              <BooleanForm
+                formData={formData}
+                onChange={handleChange}
+                onGenerate={handleGenerate}
+              />
+
+              <TierOneCard
+                generatedString={generatedString}
+                onCopy={handleCopy}
+              />
+            </motion.section>
+          </div>
+        </section>
+
+        <section className="border-t border-black/5 bg-[#fcf9f7] px-6 py-14 sm:py-16">
+          <div className="mx-auto max-w-5xl">
+            <div className="mx-auto max-w-3xl">
+              <BlueprintValueCard />
+
+              <LockedTierCard
+                tier="Blueprint Preview"
+                previewText="Preview the deeper strategy layer: refined search direction, candidate targeting logic, and market framing built around your role."
+              />
+
+              <LockedTierCard
+                tier="Packages"
+                previewText="Essential starts at $3,000. Enhanced adds CRM-ready tracking, a 3-tier email sequence, and a video walkthrough. Kaleidoscope adds the DEI Boolean layer, a recruit fact sheet, a hiring scorecard, and a wrap-up consult."
+                showButton={true}
+              />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+
+      <LeadGateModal
+        isOpen={showLeadGate}
+        onClose={handleCloseModal}
+        onSubmit={handleLeadSubmit}
+        jobTitle={formData.jobTitle}
+        unlockSuccess={unlockSuccess}
+      />
+    </div>
+  )
+}
+
+export default App
