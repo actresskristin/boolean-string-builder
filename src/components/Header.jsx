@@ -12,9 +12,6 @@ function Header() {
           />
           <div>
             <p className="serif text-xl font-bold leading-none text-[#8b000f] sm:text-2xl">
-              24 Hour Search
-            </p>
-            <p className="mt-1 text-sm text-gray-600">
               Boolean String Builder
             </p>
           </div>
