@@ -1,42 +1,42 @@
 function BlueprintValueCard() {
   return (
-    <div className="mt-6 rounded-[28px] border border-black/8 bg-white p-6 shadow-sm sm:p-7">
-      <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#8b000f]">
-        What the Full Blueprint Adds
+    <div className="mb-8">
+      <h2 className="serif text-3xl text-black">Full Search Blueprint</h2>
+
+      <p className="mt-3 text-gray-700">
+        Built the same way a retained search would be structured. Delivered in a format you can execute immediately.
       </p>
 
-      <h3 className="serif mt-3 text-2xl text-black">
-        The free tool gives you one piece. The Blueprint gives you the system.
-      </h3>
+      <div className="mt-6 space-y-5">
+        <div>
+          <h3 className="font-medium text-black">Target Definition</h3>
+          <p className="text-sm text-gray-600">
+            Role calibration, title mapping, and targeting logic based on how the market actually operates.
+          </p>
+        </div>
 
-     <p className="mt-3 text-sm leading-7 text-gray-700">
-  The full Blueprint is a 24-hour executive search strategy built for this exact role. 
-  It includes a defined candidate persona, compensation data to validate the level, 
-  and a map of where the highest-probability candidates actually sit in the market.
-</p>
+        <div>
+          <h3 className="font-medium text-black">Candidate Mapping</h3>
+          <p className="text-sm text-gray-600">
+            Where the right candidates sit, which firms produce them, and how to identify them efficiently.
+          </p>
+        </div>
 
-<p className="mt-3 text-sm leading-7 text-gray-700">
-  You receive 10 to 15 curated candidate leads, structured Boolean strings across multiple tiers, 
-  and outreach sequences designed for passive talent. The goal is not more candidates. 
-  It is the right candidates, faster.
-</p>
-<div className="mt-5 grid gap-3 sm:grid-cols-2">
-  <div className="rounded-2xl border border-black/8 bg-[#faf7f6] p-4 text-sm text-gray-700">
-    Candidate persona and search direction
-  </div>
+        <div>
+          <h3 className="font-medium text-black">Engagement Strategy</h3>
+          <p className="text-sm text-gray-600">
+            How to approach candidates with messaging that converts, not generic outreach.
+          </p>
+        </div>
+      </div>
 
-  <div className="rounded-2xl border border-black/8 bg-[#faf7f6] p-4 text-sm text-gray-700">
-    10 to 15 high-probability candidate targets
-  </div>
+      <p className="mt-6 text-sm text-gray-800">
+        Engagements start at $3,000 depending on scope.
+      </p>
 
-  <div className="rounded-2xl border border-black/8 bg-[#faf7f6] p-4 text-sm text-gray-700">
-    Compensation benchmarking tied to your role
-  </div>
-
-  <div className="rounded-2xl border border-black/8 bg-[#faf7f6] p-4 text-sm text-gray-700">
-    Outreach sequences built for passive candidates
-  </div>
-</div>
+      <p className="mt-2 text-xs text-gray-500">
+        Built from real executive search work across commercial real estate and professional services.
+      </p>
     </div>
   )
 }

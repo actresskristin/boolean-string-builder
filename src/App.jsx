@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import Header from './components/Header'
 import ToolHero from './components/ToolHero'
 import Hero from './components/Hero'
@@ -8,30 +8,31 @@ import BooleanForm from './components/BooleanForm'
 import TierOneCard from './components/TierOneCard'
 import BlueprintValueCard from './components/BlueprintValueCard'
 import LockedTierCard from './components/LockedTierCard'
-import Footer from './components/Footer'
 import LeadGateModal from './components/LeadGateModal'
+import Footer from './components/Footer'
 import { buildBooleanString } from './utils/booleanBuilder'
 import { db } from './firebase'
 
-function App() {
-  const [formData, setFormData] = useState({
-    platform: 'recruiter',
-    jobTitle: '',
-    seniority: '',
-    industry: '',
-    location: '',
-    skill1: '',
-    skill2: '',
-    skill3: '',
-    education: '',
-    certification: '',
-    exclude: '',
-  })
+const INITIAL_FORM_DATA = {
+  platform: 'recruiter',
+  jobTitle: '',
+  seniority: '',
+  industry: '',
+  location: '',
+  skill1: '',
+  skill2: '',
+  skill3: '',
+  education: '',
+  certification: '',
+  exclude: '',
+}
 
+function App() {
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA)
   const [generatedString, setGeneratedString] = useState('')
   const [showLeadGate, setShowLeadGate] = useState(false)
-  const [pendingGenerate, setPendingGenerate] = useState(false)
   const [unlockSuccess, setUnlockSuccess] = useState(false)
+  const [pendingGenerate, setPendingGenerate] = useState(false)
 
   const [usageCount, setUsageCount] = useState(() => {
     return parseInt(localStorage.getItem('booleanToolUses') || '0', 10)
@@ -46,21 +47,23 @@ function App() {
   }, [usageCount])
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    const { name, value } = e.target
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
   }
 
   const runGenerate = () => {
-    const string = buildBooleanString(formData)
+    const output = buildBooleanString(formData)
 
-    if (!string) {
-      alert('Job Title and Location are required')
+    if (!output) {
+      alert('Job Title and Location are required.')
       return false
     }
 
-    setGeneratedString(string)
+    setGeneratedString(output)
     return true
   }
 
@@ -80,11 +83,11 @@ function App() {
   }
 
   const handleCopy = () => {
+    if (!generatedString) return
     navigator.clipboard.writeText(generatedString)
   }
 
   const handleLeadSubmit = async (leadData) => {
-  try {
     const normalizedEmail = leadData.email.trim().toLowerCase()
     const existingLocalLead = localStorage.getItem('booleanLead')
 
@@ -123,10 +126,6 @@ function App() {
         setPendingGenerate(false)
       }
     }
-  } catch (error) {
-    console.error('Error saving lead:', error)
-    throw error
-  }
   }
 
   const handleCloseModal = () => {
@@ -159,6 +158,7 @@ function App() {
               <TierOneCard
                 generatedString={generatedString}
                 onCopy={handleCopy}
+                platform={formData.platform}
               />
             </motion.section>
           </div>

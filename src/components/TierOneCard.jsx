@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
-function TierOneCard({ generatedString, onCopy }) {
+function TierOneCard({ generatedString, onCopy, platform }) {
   const [copied, setCopied] = useState(false)
 
   const handleCopyClick = () => {
@@ -15,6 +15,9 @@ function TierOneCard({ generatedString, onCopy }) {
     }, 1200)
   }
 
+  const destinationLabel =
+    platform === 'xray' ? 'Google' : 'LinkedIn Recruiter'
+
   return (
     <div className="mt-6 rounded-[28px] bg-[#120708] p-6 text-white shadow-[0_18px_50px_rgba(0,0,0,0.2)] sm:p-7">
       <div className="flex items-center justify-between gap-4">
@@ -23,8 +26,8 @@ function TierOneCard({ generatedString, onCopy }) {
             Layer 1: Targeting Logic
           </p>
 
-          <p className="mt-2 text-sm text-white/70">
-            This is how a search begins. Most teams stop here. That is why most searches fail.
+          <p className="mt-2 text-sm leading-7 text-white/70">
+            This is the starting point of a search. It will surface some candidates. It will not surface the right ones consistently.
           </p>
         </div>
 
@@ -56,9 +59,15 @@ function TierOneCard({ generatedString, onCopy }) {
       )}
 
       {generatedString && (
-        <p className="mt-4 text-xs text-white/60">
-          Paste this into LinkedIn or Google to begin identifying candidates. This is the first layer of a structured search.
-        </p>
+        <div className="mt-4 space-y-2">
+          <p className="text-xs text-white/60">
+            Paste this into {destinationLabel} and review profiles. Most hiring teams stop here. That is why most searches miss the strongest candidates.
+          </p>
+
+          <p className="text-xs text-white/60">
+            The full Blueprint defines where to look, who to target, and how to engage them.
+          </p>
+        </div>
       )}
     </div>
   )

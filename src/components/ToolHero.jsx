@@ -19,11 +19,11 @@ function ToolHero() {
             </p>
 
             <h1 className="serif mt-4 text-4xl leading-tight text-black sm:text-5xl">
-              Build a smarter candidate search in minutes
+              Build a smarter candidate search in seconds.
             </h1>
 
             <p className="mt-5 text-base leading-8 text-gray-700 sm:text-lg">
-              This free tool gives you the starting point of a real executive search.
+              This free tool gives you the starting point of a real, targeted search strategy.
               Most hiring teams rely on job postings and inbound applicants. The
               strongest candidates are not applying.
             </p>

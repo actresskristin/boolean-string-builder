@@ -1,138 +1,191 @@
+function clean(value) {
+  return (value || '').trim()
+}
+
+function quote(value) {
+  return `"${value}"`
+}
+
 export function getAlternateTitle(jobTitle) {
-  const lower = jobTitle.toLowerCase()
+  const title = clean(jobTitle)
+  const lower = title.toLowerCase()
+
+  if (!title) return ''
 
   if (lower.includes('vice president')) {
-    return jobTitle.replace(/vice president/i, 'VP')
+    return title.replace(/vice president/i, 'VP')
   }
 
-  if (lower.includes('vp')) {
-    return jobTitle.replace(/\bvp\b/i, 'Vice President')
+  if (/\bvp\b/i.test(title)) {
+    return title.replace(/\bvp\b/i, 'Vice President')
   }
 
   if (lower.includes('director of')) {
-    return jobTitle.replace(/director of/i, 'Head of')
+    return title.replace(/director of/i, 'Head of')
   }
 
   if (lower.includes('manager') && !lower.includes('senior')) {
-    return `Senior ${jobTitle}`
+    return `Senior ${title}`
   }
 
   if (lower.includes('senior') && lower.includes('manager')) {
-    return jobTitle.replace(/senior/i, '').replace(/\s+/g, ' ').trim()
+    return title.replace(/senior/i, '').replace(/\s+/g, ' ').trim()
   }
 
   return ''
 }
 
-export function getAlternateSeniority(seniority) {
-  const map = {
-    Coordinator: 'Specialist',
-    Manager: 'Senior Manager',
-    Director: 'Head',
-    'Vice President': 'VP',
-    SVP: 'Senior Vice President',
-    'C-Suite': '',
-  }
-
-  return map[seniority] || ''
-}
-
 function getIndustryTerms(industry) {
-  const industryMap = {
+  const map = {
     'Commercial Real Estate': ['Commercial Real Estate', 'Real Estate'],
     'Financial Services': ['Financial Services', 'Finance'],
     'Professional Services': ['Professional Services', 'Consulting'],
     Technology: ['Technology', 'Tech'],
     Healthcare: ['Healthcare', 'Health'],
+    Construction: ['Construction', 'General Contractor'],
+    Manufacturing: ['Manufacturing', 'Industrial'],
+    Logistics: ['Logistics', 'Supply Chain'],
+    Retail: ['Retail', 'Consumer'],
+    Hospitality: ['Hospitality', 'Hotels'],
+    Legal: ['Legal', 'Law Firm'],
+    Accounting: ['Accounting', 'CPA'],
+    Insurance: ['Insurance', 'Risk'],
+    Education: ['Education', 'Higher Education'],
+    Nonprofit: ['Nonprofit', 'Not-for-Profit'],
+    Energy: ['Energy', 'Utilities'],
+    Government: ['Government', 'Public Sector'],
+    Biotechnology: ['Biotechnology', 'Biotech'],
+    Media: ['Media', 'Advertising'],
+    Telecommunications: ['Telecommunications', 'Telecom'],
   }
 
-  return industryMap[industry] || []
+  return map[industry] || []
 }
 
 function normalizeDegree(input) {
-  if (!input) return ''
+  const value = clean(input)
+  if (!value) return []
 
-  const val = input.toLowerCase()
+  const lower = value.toLowerCase()
 
-  const map = {
-    mba: ['MBA', 'Master of Business Administration', 'Masters of Business Administration'],
-    bachelors: ["Bachelor's", 'Bachelors', 'Bachelor'],
-    masters: ["Master's", 'Masters', 'Master'],
-    jd: ['JD', 'Juris Doctor'],
+  if (lower === 'mba' || lower.includes('master of business administration')) {
+    return ['MBA', 'Master of Business Administration']
   }
 
-  for (const key in map) {
-    if (val.includes(key)) {
-      return map[key]
-    }
+  if (
+    lower === "bachelor's" ||
+    lower === 'bachelors' ||
+    lower === 'bachelor' ||
+    lower === 'ba' ||
+    lower === 'bs'
+  ) {
+    return ["Bachelor's", 'Bachelors', 'Bachelor']
   }
 
-  return [input]
+  if (
+    lower === "master's" ||
+    lower === 'masters' ||
+    lower === 'master' ||
+    lower === 'ma' ||
+    lower === 'ms'
+  ) {
+    return ["Master's", 'Masters', 'Master']
+  }
+
+  if (lower === 'jd' || lower.includes('juris doctor')) {
+    return ['JD', 'Juris Doctor']
+  }
+
+  if (lower === 'msre') {
+    return ['MSRE', 'Master of Science in Real Estate']
+  }
+
+  return [value]
 }
 
-export function buildBooleanString(formData) {
-  if (!formData.jobTitle || !formData.location) {
-    return null
-  }
+function buildTitleBlock(jobTitle) {
+  const title = clean(jobTitle)
+  const altTitle = getAlternateTitle(title)
 
-  const altTitle = getAlternateTitle(formData.jobTitle)
-  const altSeniority = getAlternateSeniority(formData.seniority)
+  if (!title) return ''
 
-  const titleBlock = altTitle
-    ? `("${formData.jobTitle}" OR "${altTitle}")`
-    : `("${formData.jobTitle}")`
+  return altTitle
+    ? `(${quote(title)} OR ${quote(altTitle)})`
+    : `(${quote(title)})`
+}
 
-  const skills = [formData.skill1, formData.skill2, formData.skill3].filter(
-    (skill) => skill.trim() !== ''
-  )
+function buildSkillsBlock(formData) {
+  const skills = [formData.skill1, formData.skill2, formData.skill3]
+    .map(clean)
+    .filter(Boolean)
 
-  const skillsBlock =
-    skills.length > 0
-      ? ` AND (${skills.map((skill) => `"${skill.trim()}"`).join(' OR ')})`
-      : ''
+  if (skills.length === 0) return ''
 
-  const industryTerms =
-    formData.industry && formData.industry !== 'Other'
-      ? getIndustryTerms(formData.industry)
+  return ` AND (${skills.map(quote).join(' OR ')})`
+}
+
+function buildIndustryBlock(industry) {
+  const terms =
+    industry && industry !== 'Other'
+      ? getIndustryTerms(industry)
       : []
 
-  const industryBlock =
-    industryTerms.length > 0
-      ? ` AND (${industryTerms.map((term) => `"${term}"`).join(' OR ')})`
-      : ''
+  if (terms.length === 0) return ''
 
-  const seniorityBlock = formData.seniority
-    ? altSeniority
-      ? ` AND ("${formData.seniority}" OR "${altSeniority}")`
-      : ` AND "${formData.seniority}"`
-    : ''
+  return ` AND (${terms.map(quote).join(' OR ')})`
+}
 
-  const degreeTerms = normalizeDegree(formData.education)
+function buildLocationBlock(location) {
+  const value = clean(location)
+  if (!value) return ''
+  return ` AND ${quote(value)}`
+}
 
-const educationBlock =
-  degreeTerms.length > 0
-    ? ` AND (${degreeTerms.map((d) => `"${d}"`).join(' OR ')})`
-    : ''
+function buildEducationBlock(education) {
+  const degreeTerms = normalizeDegree(education)
 
-  const certificationBlock = formData.certification.trim()
-    ? ` AND "${formData.certification.trim()}"`
-    : ''
+  if (degreeTerms.length === 0) return ''
 
-  const excludeTerms = (formData.exclude || '')
+  return ` AND (${degreeTerms.map(quote).join(' OR ')})`
+}
+
+function buildCertificationBlock(certification) {
+  const value = clean(certification)
+  if (!value) return ''
+  return ` AND ${quote(value)}`
+}
+
+function buildExcludeBlock(exclude) {
+  const terms = clean(exclude)
     .split(',')
     .map((term) => term.trim())
     .filter(Boolean)
 
-  const excludeBlock =
-    excludeTerms.length > 0
-      ? ` NOT (${excludeTerms.map((term) => `"${term}"`).join(' OR ')})`
-      : ''
+  if (terms.length === 0) return ''
 
-  const baseString = `${titleBlock}${skillsBlock}${industryBlock} AND "${formData.location}"${seniorityBlock}${educationBlock}${certificationBlock}${excludeBlock}`
-
-if (formData.platform === 'xray') {
-  return `site:linkedin.com/in ${baseString}`
+  return ` NOT (${terms.map(quote).join(' OR ')})`
 }
 
-return baseString
+export function buildBooleanString(formData) {
+  const titleBlock = buildTitleBlock(formData.jobTitle)
+  const locationBlock = buildLocationBlock(formData.location)
+
+  if (!titleBlock || !locationBlock) {
+    return null
+  }
+
+  const coreString =
+    `${titleBlock}` +
+    `${buildSkillsBlock(formData)}` +
+    `${buildIndustryBlock(formData.industry)}` +
+    `${locationBlock}` +
+    `${buildEducationBlock(formData.education)}` +
+    `${buildCertificationBlock(formData.certification)}` +
+    `${buildExcludeBlock(formData.exclude)}`
+
+  if (formData.platform === 'xray') {
+    return `site:linkedin.com/in ${coreString}`
+  }
+
+  return coreString
 }
