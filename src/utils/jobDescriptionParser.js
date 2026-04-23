@@ -394,11 +394,20 @@ function extractDegree(lowerText) {
   return ''
 }
 
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function extractCertification(text) {
-  const upper = text.toUpperCase()
+  const normalized = clean(text)
 
   for (const cert of CERTIFICATIONS) {
-    if (upper.includes(cert.toUpperCase())) {
+    const escaped = escapeRegex(cert)
+
+    // Use word boundaries so short certs like PE do not match inside words
+    const pattern = new RegExp(`\\b${escaped}\\b`, 'i')
+
+    if (pattern.test(normalized)) {
       return cert
     }
   }
