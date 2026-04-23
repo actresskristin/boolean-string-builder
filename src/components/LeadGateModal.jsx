@@ -80,12 +80,11 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
                 </p>
 
                 <h2 className="serif mt-3 text-2xl text-black">
-                  You’ve seen the starting point. This is not the full search.
+                  This is just the beginning.
                 </h2>
 
                 <p className="mt-3 text-sm leading-7 text-gray-700">
-                  This string will return profiles. It will not give you a real candidate pool.
-                  Enter your details to continue. If this is a real search, we may follow up with additional insight.
+                  Enter your details to continue.
                 </p>
               </div>
 
@@ -164,8 +163,7 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
             <h2 className="serif text-2xl text-black">You’re in. Now use this properly.</h2>
 
             <p className="mt-3 text-sm leading-7 text-gray-700">
-              You now have access to the full builder. If this is a critical hire,
-              the Blueprint shows exactly how to run the search end-to-end.
+              You now have access to the full builder.
             </p>
 
             <a
