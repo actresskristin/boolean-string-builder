@@ -23,9 +23,8 @@ function ToolHero() {
             </h1>
 
             <p className="mt-5 text-base leading-8 text-gray-700 sm:text-lg">
-              This free tool gives you the starting point of a real, targeted search strategy.
-              Most hiring teams rely on job postings and inbound applicants. The
-              strongest candidates are not applying.
+        
+              Most hiring teams rely on job postings and inbound applicants. This free tool gives you the starting point of a real, targeted search strategy.
             </p>
           </div>
         </motion.div>
