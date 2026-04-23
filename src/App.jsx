@@ -9,6 +9,7 @@ import TierOneCard from './components/TierOneCard'
 import BlueprintValueCard from './components/BlueprintValueCard'
 import LockedTierCard from './components/LockedTierCard'
 import LeadGateModal from './components/LeadGateModal'
+import WaitlistModal from './components/WaitlistModal'
 import Footer from './components/Footer'
 import { buildBooleanString } from './utils/booleanBuilder'
 import { db } from './firebase'
@@ -30,9 +31,12 @@ const INITIAL_FORM_DATA = {
 function App() {
   const [formData, setFormData] = useState(INITIAL_FORM_DATA)
   const [generatedString, setGeneratedString] = useState('')
+
   const [showLeadGate, setShowLeadGate] = useState(false)
   const [unlockSuccess, setUnlockSuccess] = useState(false)
   const [pendingGenerate, setPendingGenerate] = useState(false)
+
+  const [showWaitlist, setShowWaitlist] = useState(false)
 
   const [usageCount, setUsageCount] = useState(() => {
     return parseInt(localStorage.getItem('booleanToolUses') || '0', 10)
@@ -82,9 +86,9 @@ function App() {
     }
   }
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     if (!generatedString) return
-    navigator.clipboard.writeText(generatedString)
+    await navigator.clipboard.writeText(generatedString)
   }
 
   const handleLeadSubmit = async (leadData) => {
@@ -128,9 +132,22 @@ function App() {
     }
   }
 
-  const handleCloseModal = () => {
+  const handleWaitlistSubmit = async (data) => {
+    await addDoc(collection(db, 'waitlist'), {
+      name: data.name.trim(),
+      email: data.email.trim().toLowerCase(),
+      company: (data.company || '').trim(),
+      createdAt: serverTimestamp(),
+    })
+  }
+
+  const handleCloseLeadGate = () => {
     setShowLeadGate(false)
     setUnlockSuccess(false)
+  }
+
+  const handleCloseWaitlist = () => {
+    setShowWaitlist(false)
   }
 
   return (
@@ -170,14 +187,8 @@ function App() {
               <BlueprintValueCard />
 
               <LockedTierCard
-                tier="Blueprint Preview"
-                previewText="Preview the deeper strategy layer: refined search direction, candidate targeting logic, and market framing built around your role."
-              />
-
-              <LockedTierCard
-                tier="Packages"
-                previewText="Essential starts at $3,000. Enhanced adds CRM-ready tracking, a 3-tier email sequence, and a video walkthrough. Kaleidoscope adds the DEI Boolean layer, a recruit fact sheet, a hiring scorecard, and a wrap-up consult."
-                showButton={true}
+                previewText="Preview the deeper strategy layer: search direction, candidate mapping, market framing, and outreach structure built around your role."
+                onWaitlistClick={() => setShowWaitlist(true)}
               />
             </div>
           </div>
@@ -188,10 +199,16 @@ function App() {
 
       <LeadGateModal
         isOpen={showLeadGate}
-        onClose={handleCloseModal}
+        onClose={handleCloseLeadGate}
         onSubmit={handleLeadSubmit}
         jobTitle={formData.jobTitle}
         unlockSuccess={unlockSuccess}
+      />
+
+      <WaitlistModal
+        isOpen={showWaitlist}
+        onClose={handleCloseWaitlist}
+        onSubmit={handleWaitlistSubmit}
       />
     </div>
   )
