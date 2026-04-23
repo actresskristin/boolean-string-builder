@@ -85,7 +85,7 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
 
                 <p className="mt-3 text-sm leading-7 text-gray-700">
                   This string will return profiles. It will not give you a real candidate pool.
-                  Enter your details to continue and see how a structured search is actually built.
+                  Enter your details to continue. If this is a real search, we may follow up with additional insight.
                 </p>
               </div>
 
@@ -93,6 +93,7 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
                 onClick={onClose}
                 className="text-gray-500 transition hover:text-black"
                 type="button"
+                aria-label="Close"
               >
                 ✕
               </button>
@@ -105,7 +106,7 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
                 onChange={handleChange}
                 type="text"
                 placeholder="Your name"
-                className="w-full rounded-xl border border-black/10 px-4 py-3"
+                className="w-full rounded-xl border border-black/10 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
               />
 
               <input
@@ -114,7 +115,7 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
                 onChange={handleChange}
                 type="email"
                 placeholder="Work email"
-                className="w-full rounded-xl border border-black/10 px-4 py-3"
+                className="w-full rounded-xl border border-black/10 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
               />
 
               <input
@@ -123,14 +124,14 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
                 onChange={handleChange}
                 type="text"
                 placeholder="Company"
-                className="w-full rounded-xl border border-black/10 px-4 py-3"
+                className="w-full rounded-xl border border-black/10 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
               />
 
-              <div className="rounded-xl bg-[#f7f3f1] px-4 py-3 text-sm">
-                Role searched: <span className="font-medium">{jobTitle || 'Not provided'}</span>
+              <div className="rounded-xl bg-[#f7f3f1] px-4 py-3 text-sm text-gray-700">
+                Role searched: <span className="font-medium text-black">{jobTitle || 'Not provided'}</span>
               </div>
 
-              <label className="flex items-start gap-3 text-sm">
+              <label className="flex items-start gap-3 rounded-xl border border-black/10 bg-[#fcf9f7] px-4 py-3 text-sm">
                 <input
                   type="checkbox"
                   name="consentToContact"
@@ -138,9 +139,8 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
                   onChange={handleChange}
                   className="mt-1 accent-[#8b000f]"
                 />
-                <span>
-                  I consent to being contacted by 24 Hour Search about this tool,
-                  my search, and related services.
+                <span className="leading-6 text-gray-700">
+                  I agree to be contacted by 24 Hour Search regarding this tool, my search, and related services. I understand I can opt out at any time.
                 </span>
               </label>
 
@@ -149,13 +149,13 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="rounded-xl bg-[#8b000f] px-5 py-3 text-white"
+                className="rounded-xl bg-[#8b000f] px-5 py-3 text-white transition hover:bg-[#74000c] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting ? 'Unlocking...' : 'Unlock the Full Builder'}
               </button>
 
-              <p className="text-xs text-gray-500">
-                You will also receive follow-up from 24 Hour Search with additional search insight.
+              <p className="text-xs leading-6 text-gray-500">
+                Your information is never sold or shared. Used only by 24 Hour Search.
               </p>
             </form>
           </>
@@ -163,23 +163,22 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
           <div className="text-center">
             <h2 className="serif text-2xl text-black">You’re in. Now use this properly.</h2>
 
-            <p className="mt-3 text-sm text-gray-700">
+            <p className="mt-3 text-sm leading-7 text-gray-700">
               You now have access to the full builder. If this is a critical hire,
               the Blueprint shows exactly how to run the search end-to-end.
             </p>
 
             <a
-              href="https://www.24hoursearch.com"
-              target="_blank"
-              rel="noreferrer"
+              href="mailto:kristin@24hoursearch.com?subject=Join%20the%20Blueprint%20Waitlist"
               className="mt-5 inline-block rounded-xl bg-[#8b000f] px-5 py-3 text-white"
             >
-              View Full Search Blueprint
+              Join the Waitlist
             </a>
 
             <button
               onClick={onClose}
               className="mt-4 text-sm text-gray-500"
+              type="button"
             >
               Continue
             </button>

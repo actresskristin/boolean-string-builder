@@ -1,4 +1,6 @@
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { extractTextFromFile } from '../utils/fileTextExtractor'
 
 const INDUSTRY_OPTIONS = [
   'Commercial Real Estate',
@@ -24,7 +26,13 @@ const INDUSTRY_OPTIONS = [
   'Other',
 ]
 
-function BooleanForm({ formData, onChange, onGenerate }) {
+function BooleanForm({ formData, onChange, onGenerate, onParseJobDescription }) {
+  const [jobDescription, setJobDescription] = useState('')
+  const [isExtracting, setIsExtracting] = useState(false)
+  const [fileError, setFileError] = useState('')
+
+  const fileInputRef = useRef(null)
+
   const handlePlatformChange = (value) => {
     onChange({
       target: {
@@ -32,6 +40,41 @@ function BooleanForm({ formData, onChange, onGenerate }) {
         value,
       },
     })
+  }
+
+  const handleParseClick = () => {
+    onParseJobDescription(jobDescription)
+  }
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setFileError('')
+    setIsExtracting(true)
+
+    try {
+      const extractedText = await extractTextFromFile(file)
+
+      if (!extractedText) {
+        setFileError(
+          'We could not read text from this file. Please paste the job description instead.'
+        )
+      } else {
+        setJobDescription(extractedText)
+      }
+    } catch (error) {
+      setFileError(
+        error.message || 'We could not read this file. Please upload a PDF or DOCX file.'
+      )
+    } finally {
+      setIsExtracting(false)
+      e.target.value = ''
+    }
   }
 
   return (
@@ -42,8 +85,63 @@ function BooleanForm({ formData, onChange, onGenerate }) {
         </p>
         <h2 className="serif mt-3 text-2xl text-black">Build Your Search</h2>
         <p className="mt-2 text-sm leading-7 text-gray-600">
-        
+          Enter a role to generate the first layer of targeting. 
         </p>
+      </div>
+
+      <div className="mb-8 rounded-[24px] border border-black/10 bg-[#fcf9f7] p-6">
+        <div className="mb-4">
+          <p className="text-sm font-medium text-black">Start with a job description</p>
+          <p className="mt-1 text-sm text-gray-600">
+            Paste or upload a job description to generate your starting search.
+          </p>
+        </div>
+
+        <textarea
+          value={jobDescription}
+          onChange={(e) => setJobDescription(e.target.value)}
+          rows={6}
+          placeholder="Paste the job description here"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
+
+        <div className="mt-3 flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={handleUploadClick}
+            className="text-sm text-gray-600 underline underline-offset-4 transition hover:text-black"
+          >
+            Upload PDF or DOCX
+          </button>
+
+          <button
+            type="button"
+            onClick={handleParseClick}
+            className="rounded-xl bg-[#8b000f] px-4 py-2 text-sm text-white transition hover:bg-[#74000c]"
+          >
+            Generate from Job Description
+          </button>
+        </div>
+
+        {isExtracting && (
+          <p className="mt-3 text-sm text-gray-600">
+            Reading file...
+          </p>
+        )}
+
+        {fileError && (
+          <p className="mt-3 text-sm text-[#8b000f]">
+            {fileError}
+          </p>
+        )}
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".pdf,.docx"
+          onChange={handleFileChange}
+          className="hidden"
+        />
       </div>
 
       <div className="grid gap-4">
@@ -79,126 +177,106 @@ function BooleanForm({ formData, onChange, onGenerate }) {
           </div>
         </div>
 
-        <div>
-          <input
-            name="jobTitle"
-            value={formData.jobTitle}
-            onChange={onChange}
-            type="text"
-            placeholder="Job Title (what you would search)"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          />
-        </div>
+        <input
+          name="jobTitle"
+          value={formData.jobTitle}
+          onChange={onChange}
+          type="text"
+          placeholder="Job Title (what you would search)"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
 
-        <div>
-          <select
-            name="seniority"
-            value={formData.seniority}
-            onChange={onChange}
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          >
-            <option value="">Seniority Level</option>
-            <option>Coordinator</option>
-            <option>Manager</option>
-            <option>Director</option>
-            <option>Vice President</option>
-            <option>SVP</option>
-            <option>C-Suite</option>
-          </select>
-        </div>
+        <select
+          name="seniority"
+          value={formData.seniority}
+          onChange={onChange}
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        >
+          <option value="">Seniority Level</option>
+          <option>Coordinator</option>
+          <option>Manager</option>
+          <option>Director</option>
+          <option>Vice President</option>
+          <option>SVP</option>
+          <option>C-Suite</option>
+        </select>
 
-        <div>
-          <select
-            name="industry"
-            value={formData.industry}
-            onChange={onChange}
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          >
-            <option value="">Industry</option>
-            {INDUSTRY_OPTIONS.map((industry) => (
-              <option key={industry} value={industry}>
-                {industry}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select
+          name="industry"
+          value={formData.industry}
+          onChange={onChange}
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        >
+          <option value="">Industry</option>
+          {INDUSTRY_OPTIONS.map((industry) => (
+            <option key={industry} value={industry}>
+              {industry}
+            </option>
+          ))}
+        </select>
 
-        <div>
-          <input
-            name="location"
-            value={formData.location}
-            onChange={onChange}
-            type="text"
-            placeholder="Location (city or metro area; if remote, list country)"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          />
-        </div>
+        <input
+          name="location"
+          value={formData.location}
+          onChange={onChange}
+          type="text"
+          placeholder="Location (city or metro area)"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
 
-        <div>
-          <input
-            name="skill1"
-            value={formData.skill1}
-            onChange={onChange}
-            type="text"
-            placeholder="Add a priority skill to refine results (optional)"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          />
-        </div>
+        <input
+          name="skill1"
+          value={formData.skill1}
+          onChange={onChange}
+          type="text"
+          placeholder="Key skill (optional)"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
 
-        <div>
-          <input
-            name="skill2"
-            value={formData.skill2}
-            onChange={onChange}
-            type="text"
-            placeholder="Add a priority skill to refine results (optional)"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          />
-        </div>
+        <input
+          name="skill2"
+          value={formData.skill2}
+          onChange={onChange}
+          type="text"
+          placeholder="Key skill (optional)"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
 
-        <div>
-          <input
-            name="skill3"
-            value={formData.skill3}
-            onChange={onChange}
-            type="text"
-            placeholder="Add a priority skill to refine results (optional)"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          />
-        </div>
+        <input
+          name="skill3"
+          value={formData.skill3}
+          onChange={onChange}
+          type="text"
+          placeholder="Key skill (optional)"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
 
-        <div>
-          <input
-            name="education"
-            value={formData.education}
-            onChange={onChange}
-            type="text"
-            placeholder="Degree (MBA, Bachelor’s, JD)"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          />
-        </div>
+        <input
+          name="education"
+          value={formData.education}
+          onChange={onChange}
+          type="text"
+          placeholder="Degree (MBA, Bachelor’s, JD)"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
 
-        <div>
-          <input
-            name="certification"
-            value={formData.certification}
-            onChange={onChange}
-            type="text"
-            placeholder="Certification (PMP, CPA, LEED)"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          />
-        </div>
+        <input
+          name="certification"
+          value={formData.certification}
+          onChange={onChange}
+          type="text"
+          placeholder="Certification (PMP, CPA, LEED)"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
 
-        <div>
-          <input
-            name="exclude"
-            value={formData.exclude}
-            onChange={onChange}
-            type="text"
-            placeholder="Exclude keywords (junior, assistant, residential)"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
-          />
-        </div>
+        <input
+          name="exclude"
+          value={formData.exclude}
+          onChange={onChange}
+          type="text"
+          placeholder="Exclude keywords (junior, assistant, residential)"
+          className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
+        />
 
         <div className="pt-2">
           <motion.button

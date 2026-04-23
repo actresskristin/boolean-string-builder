@@ -10,6 +10,7 @@ import BlueprintValueCard from './components/BlueprintValueCard'
 import LockedTierCard from './components/LockedTierCard'
 import LeadGateModal from './components/LeadGateModal'
 import WaitlistModal from './components/WaitlistModal'
+import { parseJobDescription } from './utils/jobDescriptionParser'
 import FAQ from './components/FAQ'
 import Footer from './components/Footer'
 import { buildBooleanString } from './utils/booleanBuilder'
@@ -59,6 +60,21 @@ function App() {
       [name]: value,
     }))
   }
+
+  const handleParseJobDescription = (rawText) => {
+  const parsed = parseJobDescription(rawText)
+
+  if (!parsed) {
+    return
+  }
+
+  setFormData((prev) => ({
+    ...prev,
+    ...Object.fromEntries(
+      Object.entries(parsed).filter(([, value]) => value)
+    ),
+  }))
+}
 
   const runGenerate = () => {
     const output = buildBooleanString(formData)
@@ -167,11 +183,12 @@ function App() {
               transition={{ duration: 0.5, delay: 0.08 }}
               className="mx-auto mt-12 max-w-3xl"
             >
-              <BooleanForm
-                formData={formData}
-                onChange={handleChange}
-                onGenerate={handleGenerate}
-              />
+             <BooleanForm
+  formData={formData}
+  onChange={handleChange}
+  onGenerate={handleGenerate}
+  onParseJobDescription={handleParseJobDescription}
+/>
 
               <TierOneCard
                 generatedString={generatedString}
