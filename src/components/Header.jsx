@@ -15,7 +15,7 @@ function Header() {
               24 Hour Search
             </p>
             <p className="mt-1 text-sm text-gray-600">
-              Free Boolean String Builder
+              Boolean String Builder
             </p>
           </div>
         </div>

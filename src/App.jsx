@@ -10,6 +10,7 @@ import BlueprintValueCard from './components/BlueprintValueCard'
 import LockedTierCard from './components/LockedTierCard'
 import LeadGateModal from './components/LeadGateModal'
 import WaitlistModal from './components/WaitlistModal'
+import FAQ from './components/FAQ'
 import Footer from './components/Footer'
 import { buildBooleanString } from './utils/booleanBuilder'
 import { db } from './firebase'
@@ -177,6 +178,7 @@ function App() {
                 onCopy={handleCopy}
                 platform={formData.platform}
               />
+              <FAQ />
             </motion.section>
           </div>
         </section>

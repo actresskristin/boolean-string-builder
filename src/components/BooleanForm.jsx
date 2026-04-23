@@ -129,7 +129,7 @@ function BooleanForm({ formData, onChange, onGenerate }) {
             value={formData.location}
             onChange={onChange}
             type="text"
-            placeholder="Location (city or metro area)"
+            placeholder="Location (city or metro area; if remote, list country)"
             className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
           />
         </div>
@@ -140,7 +140,7 @@ function BooleanForm({ formData, onChange, onGenerate }) {
             value={formData.skill1}
             onChange={onChange}
             type="text"
-            placeholder="Key skill (optional)"
+            placeholder="Add a priority skill to refine results (optional)"
             className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
           />
         </div>
@@ -151,7 +151,7 @@ function BooleanForm({ formData, onChange, onGenerate }) {
             value={formData.skill2}
             onChange={onChange}
             type="text"
-            placeholder="Key skill (optional)"
+            placeholder="Add a priority skill to refine results (optional)"
             className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
           />
         </div>
@@ -162,7 +162,7 @@ function BooleanForm({ formData, onChange, onGenerate }) {
             value={formData.skill3}
             onChange={onChange}
             type="text"
-            placeholder="Key skill (optional)"
+            placeholder="Add a priority skill to refine results (optional)"
             className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#8b000f] focus:ring-4 focus:ring-red-100"
           />
         </div>
