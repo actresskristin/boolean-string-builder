@@ -61,11 +61,7 @@ function TierOneCard({ generatedString, onCopy, platform }) {
       {generatedString && (
         <div className="mt-4 space-y-2">
           <p className="text-xs text-white/60">
-            Paste this into {destinationLabel} and review profiles. Most hiring teams stop here. That is why most searches miss the strongest candidates.
-          </p>
-
-          <p className="text-xs text-white/60">
-            The full Blueprint defines where to look, who to target, and how to engage them.
+            Paste this into {destinationLabel} and review profiles.
           </p>
         </div>
       )}
