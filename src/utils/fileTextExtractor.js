@@ -1,7 +1,10 @@
 import mammoth from 'mammoth'
 import * as pdfjsLib from 'pdfjs-dist'
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.mjs',
+  import.meta.url
+).toString()
 
 async function extractTextFromPdf(file) {
   const arrayBuffer = await file.arrayBuffer()
@@ -26,9 +29,7 @@ async function extractTextFromDocx(file) {
 }
 
 export async function extractTextFromFile(file) {
-  if (!file) {
-    return ''
-  }
+  if (!file) return ''
 
   const fileName = file.name.toLowerCase()
 
