@@ -1,30 +1,165 @@
 const INDUSTRY_KEYWORDS = [
-  { label: 'Commercial Real Estate', keywords: ['commercial real estate', 'property management', 'lease administration', 'asset management', 'tenant', 'landlord'] },
-  { label: 'Financial Services', keywords: ['financial services', 'banking', 'investment', 'wealth management', 'private equity', 'capital markets'] },
-  { label: 'Professional Services', keywords: ['professional services', 'consulting', 'advisory', 'client services'] },
-  { label: 'Technology', keywords: ['software', 'saas', 'technology', 'engineering', 'product management', 'cloud'] },
-  { label: 'Healthcare', keywords: ['healthcare', 'hospital', 'clinical', 'patient', 'medical'] },
-  { label: 'Construction', keywords: ['construction', 'general contractor', 'project management', 'owner’s rep', 'owners rep'] },
-  { label: 'Manufacturing', keywords: ['manufacturing', 'plant', 'production', 'industrial operations'] },
-  { label: 'Logistics', keywords: ['logistics', 'supply chain', 'distribution', 'warehouse', 'fulfillment'] },
-  { label: 'Retail', keywords: ['retail', 'store operations', 'merchandising', 'consumer'] },
-  { label: 'Hospitality', keywords: ['hospitality', 'hotel', 'lodging', 'guest services'] },
-  { label: 'Legal', keywords: ['law firm', 'legal', 'attorney', 'counsel'] },
-  { label: 'Accounting', keywords: ['accounting', 'audit', 'tax', 'controller'] },
-  { label: 'Insurance', keywords: ['insurance', 'underwriting', 'claims', 'brokerage'] },
-  { label: 'Education', keywords: ['education', 'university', 'higher education', 'school'] },
-  { label: 'Nonprofit', keywords: ['nonprofit', 'not-for-profit', 'foundation'] },
-  { label: 'Energy', keywords: ['energy', 'utilities', 'power generation'] },
-  { label: 'Government', keywords: ['government', 'public sector', 'municipal'] },
-  { label: 'Biotechnology', keywords: ['biotech', 'biotechnology', 'life sciences'] },
-  { label: 'Media', keywords: ['media', 'advertising', 'publishing'] },
-  { label: 'Telecommunications', keywords: ['telecommunications', 'telecom', 'wireless'] },
+  {
+    label: 'Commercial Real Estate',
+    keywords: [
+      'commercial real estate',
+      'property management',
+      'lease administration',
+      'asset management',
+      'tenant improvement',
+      'tenant improvements',
+      'landlord',
+      'tenant',
+      'commercial leasing',
+      'facilities management',
+    ],
+  },
+  {
+    label: 'Financial Services',
+    keywords: [
+      'financial services',
+      'banking',
+      'investment',
+      'wealth management',
+      'private equity',
+      'capital markets',
+      'asset management',
+      'lending',
+    ],
+  },
+  {
+    label: 'Professional Services',
+    keywords: [
+      'professional services',
+      'consulting',
+      'advisory',
+      'client services',
+      'business services',
+    ],
+  },
+  {
+    label: 'Technology',
+    keywords: [
+      'software',
+      'saas',
+      'technology',
+      'engineering',
+      'product management',
+      'cloud',
+      'platform',
+      'developer',
+    ],
+  },
+  {
+    label: 'Healthcare',
+    keywords: [
+      'healthcare',
+      'hospital',
+      'clinical',
+      'patient',
+      'medical',
+      'health system',
+    ],
+  },
+  {
+    label: 'Construction',
+    keywords: [
+      'construction',
+      'general contractor',
+      'owner’s rep',
+      "owner's rep",
+      'project manager',
+      'superintendent',
+      'site development',
+    ],
+  },
+  {
+    label: 'Manufacturing',
+    keywords: [
+      'manufacturing',
+      'plant',
+      'production',
+      'industrial operations',
+      'factory',
+      'assembly',
+    ],
+  },
+  {
+    label: 'Logistics',
+    keywords: [
+      'logistics',
+      'supply chain',
+      'distribution',
+      'warehouse',
+      'fulfillment',
+      'transportation',
+    ],
+  },
+  {
+    label: 'Retail',
+    keywords: [
+      'retail',
+      'store operations',
+      'merchandising',
+      'consumer',
+      'new store locations',
+      'site selection',
+      'retail real estate',
+      'store development',
+      'icsc',
+    ],
+  },
+  {
+    label: 'Hospitality',
+    keywords: ['hospitality', 'hotel', 'lodging', 'guest services'],
+  },
+  {
+    label: 'Legal',
+    keywords: ['law firm', 'legal', 'attorney', 'counsel'],
+  },
+  {
+    label: 'Accounting',
+    keywords: ['accounting', 'audit', 'tax', 'controller', 'bookkeeping'],
+  },
+  {
+    label: 'Insurance',
+    keywords: ['insurance', 'underwriting', 'claims', 'brokerage'],
+  },
+  {
+    label: 'Education',
+    keywords: ['education', 'university', 'higher education', 'school'],
+  },
+  {
+    label: 'Nonprofit',
+    keywords: ['nonprofit', 'not-for-profit', 'foundation'],
+  },
+  {
+    label: 'Energy',
+    keywords: ['energy', 'utilities', 'power generation'],
+  },
+  {
+    label: 'Government',
+    keywords: ['government', 'public sector', 'municipal'],
+  },
+  {
+    label: 'Biotechnology',
+    keywords: ['biotech', 'biotechnology', 'life sciences'],
+  },
+  {
+    label: 'Media',
+    keywords: ['media', 'advertising', 'publishing'],
+  },
+  {
+    label: 'Telecommunications',
+    keywords: ['telecommunications', 'telecom', 'wireless'],
+  },
 ]
 
 const CERTIFICATIONS = [
   'PMP',
   'CPA',
   'LEED AP',
+  'LEED GA',
   'SHRM-CP',
   'SHRM-SCP',
   'SPHR',
@@ -33,36 +168,56 @@ const CERTIFICATIONS = [
   'PE',
   'CCIM',
   'WELL AP',
-  'LEED GA',
+  'SIOR',
+  'RPA',
+  'FMA',
 ]
 
-const DEGREES = [
+const DEGREE_PATTERNS = [
   { label: 'MBA', patterns: ['mba', 'master of business administration'] },
-  { label: "Bachelor's", patterns: ["bachelor's", 'bachelors degree', 'bachelor degree', 'ba ', 'bs '] },
-  { label: "Master's", patterns: ["master's", 'masters degree', 'master degree', 'ms ', 'ma '] },
+  {
+    label: "Bachelor's",
+    patterns: [
+      "bachelor's degree",
+      'bachelors degree',
+      'bachelor degree',
+      'undergraduate degree',
+      'ba ',
+      'bs ',
+      'b.a.',
+      'b.s.',
+    ],
+  },
+  {
+    label: "Master's",
+    patterns: [
+      "master's degree",
+      'masters degree',
+      'master degree',
+      'graduate degree',
+      'ms ',
+      'ma ',
+      'm.s.',
+      'm.a.',
+    ],
+  },
   { label: 'JD', patterns: ['juris doctor', ' jd', 'jd '] },
   { label: 'MSRE', patterns: ['msre', 'master of science in real estate'] },
 ]
 
-const TITLE_PATTERNS = [
-  /chief [a-z&/ -]+/i,
-  /vice president of [a-z&/ -]+/i,
-  /vp of [a-z&/ -]+/i,
-  /senior director of [a-z&/ -]+/i,
-  /director of [a-z&/ -]+/i,
-  /head of [a-z&/ -]+/i,
-  /senior [a-z&/ -]*manager/i,
-  /[a-z&/ -]*manager/i,
-  /coordinator/i,
-]
-
 const SKILL_CANDIDATES = [
+  'site selection',
+  'lease negotiations',
+  'market analysis',
+  'market analyses',
+  'lease renewals',
+  'letters of intent',
+  'vendor management',
   'budgeting',
   'financial modeling',
   'process improvement',
   'lease administration',
   'project management',
-  'vendor management',
   'operations',
   'portfolio management',
   'compliance',
@@ -79,128 +234,130 @@ const SKILL_CANDIDATES = [
   'tenant improvement',
   'capital planning',
   'contract negotiation',
+  'store development',
+  'real estate leasing',
+  'demographics',
+  'sales forecasts',
+  'market strategies',
 ]
 
+function clean(value) {
+  return (value || '').replace(/\s+/g, ' ').trim()
+}
+
 function toTitleCase(value) {
-  return value
+  return clean(value)
     .toLowerCase()
     .replace(/\b\w/g, (char) => char.toUpperCase())
     .replace(/\bVp\b/g, 'VP')
     .replace(/\bCfo\b/g, 'CFO')
     .replace(/\bCoo\b/g, 'COO')
     .replace(/\bCeo\b/g, 'CEO')
-    .trim()
+    .replace(/\bHr\b/g, 'HR')
+    .replace(/\bIcsc\b/g, 'ICSC')
 }
 
-function extractTitle(text) {
-  const lines = text
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
+function normalizeText(value) {
+  return clean(value).toLowerCase()
+}
 
+function unique(list) {
+  return [...new Set(list.filter(Boolean))]
+}
+
+function looksLikeBadTitleStart(lower) {
   const bannedStarts = [
+    'responsible',
+    'principal',
+    'minimum',
+    'summary',
+    'develop',
+    'analyze',
+    'identify',
+    'prepare',
+    'work with',
+    'track',
+    'provide',
+    'establish',
+    'able to',
+    'customer service',
+    'extensive travel',
+    'computer skills',
+    'interface with',
+    'position interfaces',
+    'this position',
     'manage',
     'managing',
     'lead',
     'leading',
     'oversee',
     'overseeing',
-    'responsible',
-    'responsibilities',
-    'ability',
-    'experience',
     'experienced',
-    'supports',
-    'support',
+    'experience',
   ]
 
-  const strongTitlePatterns = [
-    /^(chief [a-z&/ -]+)$/i,
-    /^(vice president(?: of)? [a-z&/ -]+)$/i,
-    /^(vp(?: of)? [a-z&/ -]+)$/i,
-    /^(senior director(?: of)? [a-z&/ -]+)$/i,
-    /^(director(?: of)? [a-z&/ -]+)$/i,
-    /^(head of [a-z&/ -]+)$/i,
-    /^(senior [a-z&/ -]*manager)$/i,
-    /^([a-z&/ -]*transaction manager)$/i,
-    /^([a-z&/ -]*property manager)$/i,
-    /^([a-z&/ -]*project manager)$/i,
-    /^([a-z&/ -]*asset manager)$/i,
-    /^([a-z&/ -]*lease administrator)$/i,
-    /^([a-z&/ -]*coordinator)$/i,
+  return bannedStarts.some((word) => lower.startsWith(word))
+}
+
+function looksLikeTitle(line) {
+  const cleaned = clean(line).replace(/[•:|]/g, '')
+  const lower = cleaned.toLowerCase()
+
+  if (!cleaned) return false
+  if (cleaned.length < 4 || cleaned.length > 55) return false
+  if (looksLikeBadTitleStart(lower)) return false
+
+  const goodPatterns = [
+    /manager$/i,
+    /director$/i,
+    /coordinator$/i,
+    /administrator$/i,
+    /specialist$/i,
+    /analyst$/i,
+    /vice president/i,
+    /^vp\b/i,
+    /^chief\b/i,
+    /^head of\b/i,
+    /lease administrator$/i,
+    /real estate manager$/i,
+    /transaction manager$/i,
+    /project manager$/i,
+    /property manager$/i,
+    /asset manager$/i,
   ]
 
-  for (const line of lines) {
-    const cleaned = line.replace(/[•:|]/g, '').replace(/\s+/g, ' ').trim()
-    const lower = cleaned.toLowerCase()
-
-    if (!cleaned) continue
-    if (cleaned.length > 60) continue
-    if (bannedStarts.some((word) => lower.startsWith(word))) continue
-
-    for (const pattern of strongTitlePatterns) {
-      if (pattern.test(cleaned)) {
-        return toTitleCase(cleaned)
-      }
-    }
-  }
-
-  return ''
-
+  return goodPatterns.some((pattern) => pattern.test(cleaned))
 }
 
-function extractIndustry(lowerText) {
-  for (const industry of INDUSTRY_KEYWORDS) {
-    if (industry.keywords.some((keyword) => lowerText.includes(keyword))) {
-      return industry.label
-    }
-  }
-  return ''
-}
-
-function extractDegree(lowerText) {
-  for (const degree of DEGREES) {
-    if (degree.patterns.some((pattern) => lowerText.includes(pattern))) {
-      return degree.label
-    }
-  }
-  return ''
-}
-
-function extractCertification(text) {
-  const upper = text.toUpperCase()
-  for (const cert of CERTIFICATIONS) {
-    if (upper.includes(cert.toUpperCase())) {
-      return cert
-    }
-  }
-  return ''
-}
-
-function extractLocation(text) {
+function extractTitle(text) {
   const lines = text
     .split('\n')
-    .map((line) => line.trim())
+    .map((line) => clean(line))
     .filter(Boolean)
 
-  const locationHints = lines.find(
-    (line) =>
-      /remote|hybrid|onsite|on-site|new york|nyc|dallas|chicago|atlanta|columbus|los angeles|san francisco|boston|washington/i.test(
-        line
-      )
-  )
+  // Strongest signal: short title-like lines near the top
+  for (const line of lines.slice(0, 10)) {
+    const cleaned = clean(line.replace(/[•:|]/g, ''))
+    if (looksLikeTitle(cleaned)) {
+      return toTitleCase(cleaned)
+    }
+  }
 
-  return locationHints || ''
-}
+  // Fallback: line-by-line anywhere in document
+  for (const line of lines) {
+    const cleaned = clean(line.replace(/[•:|]/g, ''))
+    if (looksLikeTitle(cleaned)) {
+      return toTitleCase(cleaned)
+    }
+  }
 
-function extractSkills(lowerText) {
-  const matches = SKILL_CANDIDATES.filter((skill) => lowerText.includes(skill))
-  return matches.slice(0, 3)
+  return ''
 }
 
 function extractSeniority(title) {
-  const lower = title.toLowerCase()
+  const lower = normalizeText(title)
 
+  if (!lower) return ''
   if (lower.includes('chief')) return 'C-Suite'
   if (lower.includes('vice president') || /\bvp\b/i.test(title)) return 'Vice President'
   if (lower.includes('director')) return 'Director'
@@ -210,8 +367,86 @@ function extractSeniority(title) {
   return ''
 }
 
+function extractIndustry(lowerText) {
+  let bestMatch = ''
+  let bestScore = 0
+
+  for (const industry of INDUSTRY_KEYWORDS) {
+    const score = industry.keywords.reduce((count, keyword) => {
+      return lowerText.includes(keyword) ? count + 1 : count
+    }, 0)
+
+    if (score > bestScore) {
+      bestScore = score
+      bestMatch = industry.label
+    }
+  }
+
+  return bestMatch
+}
+
+function extractDegree(lowerText) {
+  for (const degree of DEGREE_PATTERNS) {
+    if (degree.patterns.some((pattern) => lowerText.includes(pattern))) {
+      return degree.label
+    }
+  }
+  return ''
+}
+
+function extractCertification(text) {
+  const upper = text.toUpperCase()
+
+  for (const cert of CERTIFICATIONS) {
+    if (upper.includes(cert.toUpperCase())) {
+      return cert
+    }
+  }
+
+  return ''
+}
+
+function extractLocation(text) {
+  const lines = text
+    .split('\n')
+    .map((line) => clean(line))
+    .filter(Boolean)
+
+  const locationPatterns = [
+    /remote/i,
+    /hybrid/i,
+    /on[- ]site/i,
+    /new york/i,
+    /\bnyc\b/i,
+    /dallas/i,
+    /chicago/i,
+    /atlanta/i,
+    /columbus/i,
+    /los angeles/i,
+    /san francisco/i,
+    /boston/i,
+    /washington/i,
+    /philadelphia/i,
+    /miami/i,
+    /houston/i,
+  ]
+
+  for (const line of lines.slice(0, 20)) {
+    if (locationPatterns.some((pattern) => pattern.test(line))) {
+      return line
+    }
+  }
+
+  return ''
+}
+
+function extractSkills(lowerText) {
+  const matches = SKILL_CANDIDATES.filter((skill) => lowerText.includes(skill))
+  return unique(matches).slice(0, 3)
+}
+
 export function parseJobDescription(rawText) {
-  const text = (rawText || '').trim()
+  const text = clean(rawText)
   const lowerText = text.toLowerCase()
 
   if (!text) {
