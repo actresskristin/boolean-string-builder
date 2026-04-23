@@ -160,18 +160,11 @@ function LeadGateModal({ isOpen, onClose, onSubmit, jobTitle, unlockSuccess }) {
           </>
         ) : (
           <div className="text-center">
-            <h2 className="serif text-2xl text-black">You’re in. Now use this properly.</h2>
+            <h2 className="serif text-2xl text-black">You’re in.</h2>
 
             <p className="mt-3 text-sm leading-7 text-gray-700">
               You now have access to the full builder.
             </p>
-
-            <a
-              href="mailto:kristin@24hoursearch.com?subject=Join%20the%20Blueprint%20Waitlist"
-              className="mt-5 inline-block rounded-xl bg-[#8b000f] px-5 py-3 text-white"
-            >
-              Join the Waitlist
-            </a>
 
             <button
               onClick={onClose}
